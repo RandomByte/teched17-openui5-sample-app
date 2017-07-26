@@ -24,7 +24,10 @@ module.exports = function(grunt) {
 					'bower_components/openui5-sap.ui.core/test-resources',
 					'bower_components/openui5-sap.m/test-resources',
 					'bower_components/openui5-themelib_sap_belize/test-resources'
-				]
+				],
+				cors: {
+					origin: 'http://localhost:<%= karma.options.port %>'
+				}
 			},
 			src: {
 				options: {
@@ -83,6 +86,44 @@ module.exports = function(grunt) {
 
 		eslint: {
 			webapp: ['webapp']
+		},
+
+		karma: {
+			options: {
+				basePath: 'webapp',
+				frameworks: ['openui5', 'qunit'],
+				openui5: {
+					path: 'http://localhost:40000/resources/sap-ui-core.js'
+				},
+				client: {
+					openui5: {
+						config: {
+							theme: 'sap_belize',
+							language: 'EN',
+							bindingSyntax: 'complex',
+							compatVersion: 'edge',
+							preload:'async',
+							resourceroots: {'sap.ui.demo.todo': './base'}
+						}
+					}
+				},
+				files: [
+					{ pattern: 'test/karma-main.js', included: true,  served: true, watched: true },
+					{ pattern: '**',                 included: false, served: true, watched: true }
+				],
+				proxies: {
+					'/base/resources': 'http://localhost:40000/resources',
+					'/base/test-resources': 'http://localhost:40000/test-resources',
+				},
+				reporters: ['progress'],
+				port: 9876,
+				logLevel: 'INFO',
+				browsers: ['PhantomJS']
+			},
+			ci: {
+				singleRun: true,
+				colors: false
+			}
 		}
 	});
 
@@ -92,6 +133,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-openui5');
 	grunt.loadNpmTasks('grunt-eslint');
+	grunt.loadNpmTasks('grunt-karma');
 
 	// Server task
 	grunt.registerTask('serve', function(target) {
@@ -103,6 +145,9 @@ module.exports = function(grunt) {
 
 	// Linting task
 	grunt.registerTask('lint', ['eslint']);
+
+	// Test task
+	grunt.registerTask('test', ['openui5_connect:src', 'karma:ci']);
 
 	// Default task
 	grunt.registerTask('default', ['serve']);
