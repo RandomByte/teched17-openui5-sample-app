@@ -67,7 +67,8 @@ module.exports = function(grunt) {
 		},
 
 		clean: {
-			dist: 'dist'
+			dist: 'dist',
+			coverage: 'coverage'
 		},
 
 		copy: {
@@ -122,7 +123,31 @@ module.exports = function(grunt) {
 			},
 			ci: {
 				singleRun: true,
-				colors: false
+				colors: false,
+				preprocessors: {
+					'{webapp,webapp/!(test)}/*.js': ['coverage']
+				},
+				coverageReporter: {
+					includeAllSources: true,
+					reporters: [
+						{
+							type: 'html',
+							dir: '../coverage/'
+						},
+						{
+							type: 'text'
+						}
+					],
+					check: {
+						each: {
+							statements: 70,
+							branches: 60,
+							functions: 70,
+							lines: 70
+						}
+					}
+				},
+				reporters: ['progress', 'coverage'],
 			}
 		}
 	});
@@ -147,7 +172,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('lint', ['eslint']);
 
 	// Test task
-	grunt.registerTask('test', ['openui5_connect:src', 'karma:ci']);
+	grunt.registerTask('test', ['clean:coverage', 'openui5_connect:src', 'karma:ci']);
 
 	// Default task
 	grunt.registerTask('default', ['serve']);
