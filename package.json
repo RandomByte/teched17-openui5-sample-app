@@ -1,0 +1,20 @@
+{
+  "name": "openui5-sample-app",
+  "version": "0.1.0",
+  "description": "Sample of an OpenUI5 app",
+  "private": true,
+  "scripts": {
+    "start": "grunt serve",
+    "build": "grunt build",
+    "postinstall": "bower install --allow-root"
+  },
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-openui5": "^0.12.0"
+  }
+}
