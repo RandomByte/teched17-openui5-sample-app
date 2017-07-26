@@ -4,6 +4,7 @@
   "description": "Sample of an OpenUI5 app",
   "private": true,
   "scripts": {
+    "test": "grunt lint",
     "start": "grunt serve",
     "build": "grunt build",
     "postinstall": "bower install --allow-root"
@@ -15,6 +16,7 @@
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-openui5": "^0.12.0"
+    "grunt-openui5": "^0.12.0",
+    "grunt-eslint": "16.0.0"
   }
 }
